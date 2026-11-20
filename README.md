@@ -27,3 +27,16 @@ Before writing code, three standard data structures were compared for managing p
 | View Most Urgent Task (Peek) | O(n) | O(1) | *O(1)* |
 | Complete Urgent Task (Dequeue) | O(n) | O(1) | *O(log n)* |
 | Rebuild Heap from Saved File | O(n) | O(n log n) | *O(n)* |
+**Functional Requirements:**
+-	Allow the user to enter a task title along with an integer priority from 1 (Highest Urgency) to 5 (Lowest Urgency).
+-	Display the most urgent task immediately without removing it from the queue.
+-	Complete and remove the most urgent task, automatically promoting the next most urgent task to the top.
+-	Display all pending tasks in urgency order and save data persistently in tasks.txt.
+**Non-Functional Requirements:**
+-	Logarithmic O(log n) time complexity for insertions and extractions with O(n) space.
+-	First-In, First-Out (FIFO) tie-breaking when two tasks share the same priority number.
+-	Safe input buffer handling so invalid characters do not cause infinite console loops.
+# 2.3 Proposed Solution
+The proposed system stores tasks in a fixed-capacity 1D array Task heap[MAX_TASKS] structured as a Complete Binary Tree (Min-Heap). Because a Min-Heap always keeps the smallest key at index 0, setting 1 as the highest urgency ensures the most critical task stays at the root. Each node also stores an incremental order number so tasks with identical priorities are served in the order they were added.
+2.5 Project Schedule and Task Allocation
+

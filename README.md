@@ -27,11 +27,13 @@ Before writing code, three standard data structures were compared for managing p
 | View Most Urgent Task (Peek) | O(n) | O(1) | *O(1)* |
 | Complete Urgent Task (Dequeue) | O(n) | O(1) | *O(log n)* |
 | Rebuild Heap from Saved File | O(n) | O(n log n) | *O(n)* |
+
 **Functional Requirements:**
 -	Allow the user to enter a task title along with an integer priority from 1 (Highest Urgency) to 5 (Lowest Urgency).
 -	Display the most urgent task immediately without removing it from the queue.
 -	Complete and remove the most urgent task, automatically promoting the next most urgent task to the top.
 -	Display all pending tasks in urgency order and save data persistently in tasks.txt.
+-	
 **Non-Functional Requirements:**
 -	Logarithmic O(log n) time complexity for insertions and extractions with O(n) space.
 -	First-In, First-Out (FIFO) tie-breaking when two tasks share the same priority number.

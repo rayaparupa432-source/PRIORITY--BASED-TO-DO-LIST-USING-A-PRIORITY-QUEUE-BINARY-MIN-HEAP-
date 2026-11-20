@@ -14,4 +14,18 @@ Building a task manager using basic linear data structures like an unsorted arra
 -	To design and build a working command-line To-Do List application in C++ using a custom Binary Min-Heap written from scratch.
 -	To implement core operations including adding tasks with urgency levels (1 to 5), viewing the most urgent task, completing/removing the top task, and listing all pending tasks.
 -	To ensure equal-priority tasks are handled fairly in arrival order and saved locally in a file so data is not lost when the program closes.
--	To verify correctness through structured test cases and document the complete design and complexity analysis
+-	To verify correctness through structured test cases and document the complete design and complexity analysis.
+# CHAPTER 2: PROJECT PLANNING AND PROBLEM ANALYSIS
+# 2.1 Initial Project Planning
+Following the CSE 2B DSA Mini Project instructions, this work was planned and completed as an
+individual project ahead of the 30 November 2026 submission deadline. The goal was to take Topic 3
+("To-do list with priorities: Use a priority queue (heap) so the most urgent task comes out first") and
+build a practical console program in C++ without relying on built-in STL heap shortcuts like
+std::priority_queue.
+All stages—from writing the heap balancing functions (heapifyUp and heapifyDown) to testing
+edge cases and uploading the source code to GitHub—were carried out independently using Visual
+Studio Code and the GCC C++ compiler.
+2.2 Brainstorming and Requirement Identification
+Before writing code, three common ways of storing prioritized tasks were compared on time
+complexity:
+  

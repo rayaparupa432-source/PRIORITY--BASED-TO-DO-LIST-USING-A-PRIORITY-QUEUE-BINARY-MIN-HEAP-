@@ -40,12 +40,4 @@ Before writing code, three standard data structures were compared for managing p
 -	Safe input buffer handling so invalid characters do not cause infinite console loops.
 # 2.3 Proposed Solution
 The proposed system stores tasks in a fixed-capacity 1D array Task heap[MAX_TASKS] structured as a Complete Binary Tree (Min-Heap). Because a Min-Heap always keeps the smallest key at index 0, setting 1 as the highest urgency ensures the most critical task stays at the root. Each node also stores an incremental order number so tasks with identical priorities are served in the order they were added.
-# 2.4 Project Schedule and Task Allocation
-| Task / Activity | Assigned Member(s) | Planned Timeline | Status |
-| :--- | :--- | :--- | :--- |
-| Requirement analysis | Individual (Self) | Nov 18 – Nov 19, 2026 | Completed |
-| System design | Individual (Self) | Nov 20 – Nov 21, 2026 | Completed |
-| Development (C Coding) | Individual (Self) | Nov 21 – Nov 22, 2026 | Completed |
-| Testing & Validation | Individual (Self) | Nov 22 – Nov 23, 2026 | Completed |
-| Documentation & GitHub Upload | Individual (Self) | Nov 23 – Nov 24, 2026 | Completed |
 

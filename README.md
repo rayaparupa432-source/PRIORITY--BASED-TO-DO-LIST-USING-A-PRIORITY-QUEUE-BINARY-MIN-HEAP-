@@ -77,7 +77,7 @@ heapifyUp() and heapifyDown().
 tasks.txt and reload them on startup.
 ### Figure 4.1: System Architecture (3-Layer Design)
 
-text
+'''text
 +-------------------------------------------------------+
 
 |           1. Console UI Layer (main loop)             |
@@ -99,3 +99,4 @@ text
 |              3. File Persistence Layer                |
 |            FILE* (tasks.txt Read & Write)             |
 +-------------------------------------------------------+
+'''

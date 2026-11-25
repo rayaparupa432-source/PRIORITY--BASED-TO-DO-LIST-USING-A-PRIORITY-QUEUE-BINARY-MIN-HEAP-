@@ -64,6 +64,15 @@ The proposed system stores tasks in a fixed-capacity 1D array Task heap[MAX_TASK
 | *Development Tools* | Visual Studio Code (VS Code), GCC (gcc compiler), Git, GitHub |
 
 **Feasibility Summary:** The project is technically straightforward using standard C arrays and file pointers, economically free since only open-source tools are required, and operationally simple for any user to run in a terminal.
-
+# CHAPTER 4: SYSTEM DESIGN AND MODELLING
+**4.1 System Architecture**
+The program is divided into three clean functional layers:
+1. **Console Interface Layer (main):** Displays the interactive menu, reads user choices, and cleans
+standard input streams.
+2. **Min-Heap Priority Engine:** Uses 0-based array index formulas—parent = (i - 1) / 2, 
+left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
+heapifyUp() and heapifyDown().
+3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
+tasks.txt and reload them on startup.
 
 

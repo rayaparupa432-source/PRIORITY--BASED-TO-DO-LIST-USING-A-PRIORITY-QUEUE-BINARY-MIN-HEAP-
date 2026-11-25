@@ -485,6 +485,9 @@ Exiting program. All tasks saved to tasks.txt.
 </pre>
 
 ### Output Screenshot
+<img width="4080" height="3060" alt="1000202267" src="https://github.com/user-attachments/assets/bf988d16-0eee-4ef3-b8a7-5aa5d5844ae0" />
+<img width="4080" height="3060" alt="1000202266" src="https://github.com/user-attachments/assets/24f2954c-df32-46ff-8141-91668ac25600" />
+
 
 ### Execution Video
 

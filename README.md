@@ -259,32 +259,39 @@ dsa-priority-todo-c/
 ### Complete C Source Code(main.c)
 #include <stdio.h>
 #include <string.h>
+
 #define MAX_TASKS 100
 #define MAX_TITLE 100
 #define FILENAME "tasks.txt"
+
 typedef struct {
     int priority;
     int order;
     char title[MAX_TITLE];
 } Task;
+
 Task heap[MAX_TASKS];
 int heapSize = 0, taskCounter = 0;
+
 int isMoreUrgent(Task a, Task b) {
     if (a.priority != b.priority)
         return a.priority < b.priority;
     return a.order < b.order;
 }
+
 void swapTasks(Task *a, Task *b) {
     Task temp = *a;
     *a = *b;
     *b = temp;
 }
+
 void heapifyUp(int index) {
     while (index > 0 && isMoreUrgent(heap[index], heap[(index - 1) / 2])) {
         swapTasks(&heap[index], &heap[(index - 1) / 2]);
         index = (index - 1) / 2;
     }
 }
+
 void heapifyDown(int index) {
     int smallest = index, left = 2 * index + 1, right = 2 * index + 2;
     if (left < heapSize && isMoreUrgent(heap[left], heap[smallest])) smallest = left;

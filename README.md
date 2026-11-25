@@ -75,9 +75,9 @@ left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
 heapifyUp() and heapifyDown().
 3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
 tasks.txt and reload them on startup.
-### Figure 4.1: System Architecture (3-Layer Design)
+<h3>Figure 4.1: System Architecture (3-Layer Design)</h3>
 
-'''text
+<pre>
 +-------------------------------------------------------+
 
 |           1. Console UI Layer (main loop)             |
@@ -99,4 +99,4 @@ tasks.txt and reload them on startup.
 |              3. File Persistence Layer                |
 |            FILE* (tasks.txt Read & Write)             |
 +-------------------------------------------------------+
-'''
+</pre>

@@ -75,7 +75,7 @@ left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
 heapifyUp() and heapifyDown().
 3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
 tasks.txt and reload them on startup.
-<h3>Figure 4.1: System Architecture (3-Layer Design)</h3>
+<h3>Figure 4.1.a: System Architecture (3-Layer Design)</h3>
 
 <pre>
 +-------------------------------------------------------+
@@ -101,7 +101,7 @@ tasks.txt and reload them on startup.
 +-------------------------------------------------------+
 </pre>
 
-<h3>Figure 4.2: Array-Backed Binary Min-Heap Mapping (heap = Most Urgent)</h3>
+<h3>Figure 4.1.b: Array-Backed Binary Min-Heap Mapping (heap = Most Urgent)</h3>
 
 <pre>
                  +-------------------------+
@@ -126,3 +126,114 @@ tasks.txt and reload them on startup.
 |    (Index 3)    | |    (Index 4)    |
 +-----------------+ +-----------------+
 </pre>
+
+## 4.2 Data Flow Diagram (DFD), Structure Design & Flowchart
+
+### Context-Level DFD (Level 0)
+In this system, the *User* interacts directly with the main process (0.0 Priority To-Do List Manager) by giving task details and selecting menu options. Based on the input, the manager updates the tasks inside the in-memory Min-Heap and keeps the records synced with the text file data store (D1: tasks.txt). Finally, it fetches and displays the highest-priority task back to the user.
+
+<pre>
++----------+   Task Details & Menu Choices    +-------------------------------+
+
+|          | -------------------------------> |                               |
+|   User   |                                  |  0.0 Priority To-Do List      |
+|          | <------------------------------- |      Manager (Main Process)   |
++----------+    Most Urgent Task & Status     +-------------------------------+
+                                                        ^             |
+                                    Reload Saved Tasks  |             | Sync & Save Tasks
+                                                        |             v
+                                              +-------------------------------+
+
+                                              |         D1: tasks.txt         |
+                                              +-------------------------------+
+</pre>
+
+### Data Structure Design (struct Task)
+To store all details of a single task together, we defined a custom structure named Task. Each element in our heap array holds three fields:
+* int priority: Stores the urgency level of the task from 1 (most urgent) to 5 (least urgent).
+* int order: Acts as a simple FIFO counter to track insertion order. If two tasks have the same priority, the one added earlier gets executed first.
+* char title: A character array to hold the name or description of the task.
+
+### Operational Flowchart (Completing the Most Urgent Task)
+When the user chooses to complete the top-priority task, the program follows these exact steps:
+1. *Start* the operation and check if the heap is empty (heapSize == 0).
+2. *If empty:* Print a warning message that no tasks are available and *End* the process.
+3. *If not empty:* Save the root element (heap) into a temporary variable topTask.
+4. Move the last task in the array (heap[heapSize - 1]) to the root position (heap) and reduce heapSize by 1.
+5. Call heapifyDown(0) to restore the min-heap property.
+6. Call saveToFile() to update tasks.txt, print the completed topTask on the screen, and *End*.
+
+<pre>
+                    +-----------------------+
+
+                    |         Start         |
+                    +-----------------------+
+                                |
+                                v
+                    +-----------------------+       Yes      +-----------------------+
+
+                    |   Is heapSize == 0 ?  | -------------> |  Print Empty Warning  |
+                    +-----------------------+                +-----------------------+
+
+                                |                                        |
+                                | No                                     |
+                                v                                        |
+                    +-----------------------+                            |
+
+                    | Copy heap to topTask|                            |
+                    +-----------------------+                            |
+
+                                |                                        |
+                                v                                        |
+                    +-----------------------+                            |
+
+                    | Move heap[heapSize-1] |                            |
+                    |   to heap & size--  |                            |
+                    +-----------------------+                            |
+
+                                |                                        |
+                                v                                        |
+                    +-----------------------+                            |
+
+                    |  Run heapifyDown(0)   |                            |
+                    +-----------------------+                            |
+
+                                |                                        |
+                                v                                        |
+                    +-----------------------+                            |
+
+                    |  Call saveToFile() &  |                            |
+                    |    Print topTask      |                            |
+                    +-----------------------+                            |
+
+                                |                                        |
+                                +--------------------+-------------------+
+                                                     |
+                                                     v
+                                           +-------------------+
+
+                                           |        End        |
+                                           +-------------------+
+</pre>
+
+---
+
+## 4.3 Algorithm / Logic
+
+### Algorithm 1: Enqueue Task (enqueueTask) — Time Complexity: O(log n)
+1. First, check if heapSize < MAX_TASKS. If the array is already full, print an overflow warning and return.
+2. Create newTask with {priority, ++taskCounter, title}, place it at the end of the array (heap[heapSize]), and increment heapSize.
+3. Call heapifyUp(heapSize - 1):
+   * Keep checking while index > 0.
+   * Compare heap[index] with its parent at heap[(index - 1) / 2].
+   * If the current task is more urgent than its parent, swap both structures and update index to the parent's position; otherwise, stop the loop.
+
+### Algorithm 2: Dequeue Most Urgent Task (completeUrgent) — Time Complexity: O(log n)
+1. Check if heapSize == 0. If true, print an underflow message and return immediately.
+2. Store topTask = heap, overwrite heap with the last element
+3. 3. Call heapifyDown(0):
+   * Find the left child (2 * index + 1) and right child (2 * index + 2).
+   * Compare the current node with its children and swap it with the most urgent child if needed.
+   * Repeat this process moving down the tree until the heap order is restored.
+4. Save the updated heap back to tasks.txt and display the completed topTask to the user.
+ 

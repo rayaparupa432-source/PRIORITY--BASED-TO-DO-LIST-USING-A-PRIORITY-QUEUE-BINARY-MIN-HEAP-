@@ -483,3 +483,25 @@ Completed &amp; Removed -&gt; [Priority 1] Submit Project
 Enter your choice (1-5): 5
 Exiting program. All tasks saved to tasks.txt.
 </pre>
+
+### Output Screenshot
+
+### Execution Video
+
+# CHAPTER 7: CONCLUSION AND FUTURE SCOPE
+
+## 7.1 Conclusion
+Building this *Priority-Based To-Do List* clearly shows how an array-backed Binary Min-Heap Priority Queue in C works much faster than a regular linear list when managing urgent tasks. All the main goals of the project—including $O(\log n)$ insertion and deletion, $O(1)$ lookup for the most urgent task, $O(n)$ bottom-up file loading, FIFO tie-breaking, and permanent file storage—were successfully achieved. Currently, the main limitations are the fixed array limit (MAX_TASKS = 100) and the single-user terminal interface.
+
+## 7.2 Future Scope
+* *Dynamic Memory Allocation:* Replace the static array with dynamic memory reallocation (malloc / realloc) so the task list can grow automatically without any fixed size limit.
+* *Automatic Priority Escalation:* Add due dates to tasks so their urgency level increases automatically as the deadline gets closer.
+* *Visual Dashboard:* Build a simple visual or web interface that displays the live Binary Heap tree structure alongside the pending task list.
+
+---
+
+# REFERENCES
+
+1. T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, Introduction to Algorithms, 4th ed. Cambridge, MA, USA: MIT Press, 2022.
+2. E. Horowitz, S. Sahni, and S. Anderson-Freed, Fundamentals of Data Structures in C, 2nd ed. Silicon Press, 2008.
+3. B. W. Kernighan and D. M. Ritchie, The C Programming Language, 2nd ed. Englewood Cliffs, NJ, USA: Prentice Hall, 1988.

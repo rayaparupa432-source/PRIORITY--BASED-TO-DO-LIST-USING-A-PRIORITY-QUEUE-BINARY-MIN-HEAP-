@@ -77,15 +77,25 @@ heapifyUp() and heapifyDown().
 tasks.txt and reload them on startup.
 ### Figure 4.1: System Architecture (3-Layer Design)
 
-mermaid
-flowchart TD
-    UI["<b>1. Console UI Layer (main loop)</b><br/>Menu, scanf/fgets Input Validation"]
-    Heap["<b>2. Min-Heap Priority Engine</b><br/>Task heap[MAX_TASKS], heapifyUp/Down"]
-    File["<b>3. File Persistence Layer</b><br/>FILE* (tasks.txt Read & Write)"]
+text
++-------------------------------------------------------+
 
-    UI <--> Heap
-    Heap <--> File
+|           1. Console UI Layer (main loop)             |
+|          Menu, scanf/fgets Input Validation           |
++-------------------------------------------------------+
+                           ^
+                           |
+                           v
++-------------------------------------------------------+
 
-    style UI fill:#ffffff,stroke:#2c5e8a,stroke-width:2px
-    style Heap fill:#ffffff,stroke:#2e7d32,stroke-width:2px
-    style File fill:#ffffff,stroke:#8d6e63,stroke-width:2px
+|             2. Min-Heap Priority Engine               |
+|         Task heap[MAX_TASKS], heapifyUp/Down          |
++-------------------------------------------------------+
+                           ^
+                           |
+                           v
++-------------------------------------------------------+
+
+|              3. File Persistence Layer                |
+|            FILE* (tasks.txt Read & Write)             |
++-------------------------------------------------------+

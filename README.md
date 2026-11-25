@@ -384,7 +384,7 @@ int main() {
         printf("1. Add Task\n2. View Most Urgent Task\n3. Complete Most Urgent Task\n4. Display All Pending Tasks\n5. Exit\n");
         printf("Enter your choice (1-5): ");
         scanf("%d", &amp;choice);
-        getchar(); // clear newline
+        getchar(); 
 
         if (choice == 1) {
             printf("Enter task title: ");
@@ -409,3 +409,77 @@ int main() {
 }
 </pre>
 
+# CHAPTER 6: TESTING AND VALIDATION
+
+## 6.1 Test Cases and Results
+
+| Test ID | Test Scenario | Input | Expected Output | Observed | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *TC-01* | Out-of-order insertion (heapifyUp) | ("Buy notes", 4), ("Fix bug", 1), ("Lab file", 2) | "Fix bug" bubbles up to root heap | [Priority 1] Fix bug at root | Pass |
+| *TC-02* | Peek most urgent task ($O(1)$) | Select Option 2 | Displays [Priority 1] Fix bug without removing | Displayed without removal | Pass |
+| *TC-03* | Complete urgent task (heapifyDown) | Select Option 3 | Removes Priority 1; promotes Priority 2 to root | Lab file became new root | Pass |
+| *TC-04* | Equal priority tie-breaking | Add ("Task A", 2) then ("Task B", 2) | "Task A" extracted before "Task B" (FIFO) | "Task A" dequeued first | Pass |
+| *TC-05* | Invalid input & empty queue | Priority 7 or Dequeue on empty heap | Prints clean error message without crashing | Handled safely | Pass |
+
+## 6.2 Error Handling and Validation
+* *Input Buffer Cleanup:* After reading numeric menu choices with scanf("%d", ...), leftover newline characters are cleared using getchar() so fgets can safely read the next task title without skipping input.
+* *Boundary & Bounds Checks:* The program rejects any priority value outside 1–5, prevents array overflow beyond MAX_TASKS, and blocks empty-heap extraction whenever heapSize == 0.
+
+## 6.3 Testing Summary
+All 5 test cases passed smoothly during GCC compilation with -Wall enabled (zero compiler warnings). Adding the monotonic order counter cleanly resolved tie-breaking ambiguity whenever multiple tasks shared the same priority level.
+
+## 6.4 Sample Program Output
+
+<pre>
+=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===
+1. Add Task
+2. View Most Urgent Task
+3. Complete Most Urgent Task
+4. Display All Pending Tasks
+5. Exit
+Enter your choice (1-5): 1
+Enter task title: Study C
+Enter priority (1-5): 3
+Task added successfully!
+
+=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===
+1. Add Task
+2. View Most Urgent Task
+3. Complete Most Urgent Task
+4. Display All Pending Tasks
+5. Exit
+Enter your choice (1-5): 1
+Enter task title: Submit Project
+Enter priority (1-5): 1
+Task added successfully!
+
+=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===
+1. Add Task
+2. View Most Urgent Task
+3. Complete Most Urgent Task
+4. Display All Pending Tasks
+5. Exit
+Enter your choice (1-5): 4
+
+--- Pending Tasks (Most Urgent First) ---
+1. [Priority 1] Submit Project
+2. [Priority 3] Study C
+
+=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===
+1. Add Task
+2. View Most Urgent Task
+3. Complete Most Urgent Task
+4. Display All Pending Tasks
+5. Exit
+Enter your choice (1-5): 3
+Completed &amp; Removed -&gt; [Priority 1] Submit Project
+
+=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===
+1. Add Task
+2. View Most Urgent Task
+3. Complete Most Urgent Task
+4. Display All Pending Tasks
+5. Exit
+Enter your choice (1-5): 5
+Exiting program. All tasks saved to tasks.txt.
+</pre>

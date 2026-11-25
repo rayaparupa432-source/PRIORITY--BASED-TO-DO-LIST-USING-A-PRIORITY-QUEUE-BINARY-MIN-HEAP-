@@ -66,6 +66,7 @@ The proposed system stores tasks in a fixed-capacity 1D array Task heap[MAX_TASK
 **Feasibility Summary:** The project is technically straightforward using standard C arrays and file pointers, economically free since only open-source tools are required, and operationally simple for any user to run in a terminal.
 # CHAPTER 4: SYSTEM DESIGN AND MODELLING
 **4.1 System Architecture**
+
 The program is divided into three clean functional layers:
 1. **Console Interface Layer (main):** Displays the interactive menu, reads user choices, and cleans
 standard input streams.
@@ -74,5 +75,16 @@ left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
 heapifyUp() and heapifyDown().
 3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
 tasks.txt and reload them on startup.
+mermaid
+flowchart TD
+    UI["<b>1. Console UI Layer (main loop)</b><br/>Menu, scanf/fgets Input Validation"]
+    Engine["<b>2. Min-Heap Priority Engine</b><br/>Task heap[MAX_TASKS], heapifyUp/Down"]
+    File["<b>3. File Persistence Layer</b><br/>FILE* (tasks.txt Read & Write)"]
 
+    UI <--> Engine
+    Engine <--> File
+
+    style UI fill:#eef2f7,stroke:#334155,stroke-width:2px,color:#0f172a
+    style Engine fill:#ecfdf5,stroke:#065f46,stroke-width:2px,color:#0f172a
+    style File fill:#fef3c7,stroke:#92400e,stroke-width:2px,color:#0f172a
 

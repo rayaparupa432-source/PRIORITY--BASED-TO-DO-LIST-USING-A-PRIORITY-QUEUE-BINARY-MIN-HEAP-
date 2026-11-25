@@ -236,4 +236,25 @@ When the user chooses to complete the top-priority task, the program follows the
    * Compare the current node with its children and swap it with the most urgent child if needed.
    * Repeat this process moving down the tree until the heap order is restored.
 4. Save the updated heap back to tasks.txt and display the completed topTask to the user.
- 
+ # CHAPTER 5: IMPLEMENTATION
+
+## 5.1 Development Environment
+I wrote this project in standard C using Visual Studio Code and compiled it with the command gcc -Wall -O2 main.c -o todo. For version control and hosting the source code, I used Git and GitHub.
+
+## 5.3 Database / File Handling Implementation
+All tasks are saved inside tasks.txt using a simple line format: priority|order|title. Whenever the program starts, the loadFromFile() function reads each line back into the heap[] array. After loading, it runs Floyd's bottom-up heapify loop starting from (heapSize / 2) - 1 down to 0 so that the valid Min-Heap order is restored in $O(n)$ time.
+
+## 5.4 Integration of Components
+The main() function works as the central controller of the application. Once the saved tasks are loaded on startup, it displays a continuous 5-option menu for the user. Every time a task is added (enqueueTask) or completed (completeUrgent), the program immediately updates both the in-memory heap array and the tasks.txt file to keep data synced.
+
+## 5.5 Source Code Repository & Project Structure
+
+### Project Directory Structure
+<pre>
+dsa-priority-todo-c/
+├── main.c          # Complete C source code with custom Binary Min-Heap
+├── tasks.txt       # Auto-generated persistent task file
+└── README.md       # Project documentation and build instructions
+</pre>
+
+

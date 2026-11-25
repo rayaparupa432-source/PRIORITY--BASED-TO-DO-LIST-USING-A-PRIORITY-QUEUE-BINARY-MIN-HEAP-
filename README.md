@@ -256,5 +256,133 @@ dsa-priority-todo-c/
 ├── tasks.txt       # Auto-generated persistent task file
 └── README.md       # Project documentation and build instructions
 </pre>
-
-
+### Complete C Source Code(main.c)
+#include <stdio.h>
+#include <string.h>
+#define MAX_TASKS 100
+#define MAX_TITLE 100
+#define FILENAME "tasks.txt"
+typedef struct {
+    int priority;
+    int order;
+    char title[MAX_TITLE];
+} Task;
+Task heap[MAX_TASKS];
+int heapSize = 0, taskCounter = 0;
+int isMoreUrgent(Task a, Task b) {
+    if (a.priority != b.priority)
+        return a.priority < b.priority;
+    return a.order < b.order;
+}
+void swapTasks(Task *a, Task *b) {
+    Task temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void heapifyUp(int index) {
+    while (index > 0 && isMoreUrgent(heap[index], heap[(index - 1) / 2])) {
+        swapTasks(&heap[index], &heap[(index - 1) / 2]);
+        index = (index - 1) / 2;
+    }
+}
+void heapifyDown(int index) {
+    int smallest = index, left = 2 * index + 1, right = 2 * index + 2;
+    if (left < heapSize && isMoreUrgent(heap[left], heap[smallest])) smallest = left;
+    if (right < heapSize && isMoreUrgent(heap[right], heap[smallest])) smallest = right;
+    if (smallest != index) {
+        swapTasks(&heap[index], &heap[smallest]);
+        heapifyDown(smallest);
+    }
+}
+void saveToFile() {
+    FILE *fp = fopen(FILENAME, "w");
+    if (!fp) return;
+    for (int i = 0; i < heapSize; i++)
+        fprintf(fp, "%d|%d|%s\n", heap[i].priority, heap[i].order, heap[i].title);
+    fclose(fp);
+}
+void loadFromFile() {
+    FILE *fp = fopen(FILENAME, "r");
+    if (!fp) return;
+    heapSize = 0;
+    while (heapSize < MAX_TASKS && fscanf(fp, "%d|%d|%[^\n]\n", &heap[heapSize].priority, &heap[heapSize].order, heap[heapSize].title) == 3) {
+        if (heap[heapSize].order > taskCounter) taskCounter = heap[heapSize].order;
+        heapSize++;
+    }
+    fclose(fp);
+    for (int i = (heapSize / 2) - 1; i >= 0; i--)
+        heapifyDown(i);
+}
+void enqueueTask(int priority, char title[]) {
+    if (heapSize >= MAX_TASKS) {
+        printf("Error: Task list is full!\n");
+        return;
+    }
+    heap[heapSize].priority = priority;
+    heap[heapSize].order = ++taskCounter;
+    strcpy(heap[heapSize].title, title);
+    heapifyUp(heapSize++);
+    saveToFile();
+    printf("Task added successfully!\n");
+}
+void viewUrgent() {
+    if (heapSize == 0) printf("No pending tasks in the list.\n");
+    else printf("Most Urgent Task -> [Priority %d] %s\n", heap[0].priority, heap[0].title);
+}
+void completeUrgent() {
+    if (heapSize == 0) {
+        printf("No tasks available to complete.\n");
+        return;
+    }
+    printf("Completed & Removed -> [Priority %d] %s\n", heap[0].priority, heap[0].title);
+    heap[0] = heap[--heapSize];
+    heapifyDown(0);
+    saveToFile();
+}
+void displayAllTasks() {
+    if (heapSize == 0) {
+        printf("The priority to-do list is currently empty.\n");
+        return;
+    }
+    Task backupHeap[MAX_TASKS];
+    int backupSize = heapSize;
+    memcpy(backupHeap, heap, sizeof(heap));
+    printf("\n--- Pending Tasks (Most Urgent First) ---\n");
+    for (int rank = 1; heapSize > 0; rank++) {
+        printf("%d. [Priority %d] %s\n", rank, heap[0].priority, heap[0].title);
+        heap[0] = heap[--heapSize];
+        heapifyDown(0);
+    }
+    memcpy(heap, backupHeap, sizeof(backupHeap));
+    heapSize = backupSize;
+}
+int main() {
+    loadFromFile();
+    int choice, priority;
+    char title[MAX_TITLE];
+    while (1) {
+        printf("\n=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===\n");
+        printf("1. Add Task\n2. View Most Urgent Task\n3. Complete Most Urgent Task\n4. Display All Pending Tasks\n5. Exit\n");
+        printf("Enter your choice (1-5): ");
+        scanf("%d", &choice);
+        getchar(); // clear newline
+        if (choice == 1) {
+            printf("Enter task title: ");
+            fgets(title, sizeof(title), stdin);
+            title[strcspn(title, "\n")] = '\0';
+            printf("Enter priority (1-5): ");
+            scanf("%d", &priority);
+            if (priority < 1 || priority > 5) printf("Invalid priority!\n");
+            else enqueueTask(priority, title);
+        } 
+        else if (choice == 2) viewUrgent();
+        else if (choice == 3) completeUrgent();
+        else if (choice == 4) displayAllTasks();
+        else if (choice == 5) {
+            printf("Exiting program. All tasks saved to %s.\n", FILENAME);
+            break;
+        } 
+        else printf("Invalid choice!\n");
+    }
+    return 0;
+}

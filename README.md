@@ -75,17 +75,17 @@ left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
 heapifyUp() and heapifyDown().
 3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
 tasks.txt and reload them on startup.
-### System Architecture
+### Figure 4.1: System Architecture (3-Layer Design)
+
 mermaid
 flowchart TD
     UI["<b>1. Console UI Layer (main loop)</b><br/>Menu, scanf/fgets Input Validation"]
-    Engine["<b>2. Min-Heap Priority Engine</b><br/>Task heap[MAX_TASKS], heapifyUp/Down"]
+    Heap["<b>2. Min-Heap Priority Engine</b><br/>Task heap[MAX_TASKS], heapifyUp/Down"]
     File["<b>3. File Persistence Layer</b><br/>FILE* (tasks.txt Read & Write)"]
 
-    UI <--> Engine
-    Engine <--> File
+    UI <--> Heap
+    Heap <--> File
 
-    style UI fill:#eef2f7,stroke:#334155,stroke-width:2px,color:#0f172a
-    style Engine fill:#ecfdf5,stroke:#065f46,stroke-width:2px,color:#0f172a
-    style File fill:#fef3c7,stroke:#92400e,stroke-width:2px,color:#0f172a
-
+    style UI fill:#ffffff,stroke:#2c5e8a,stroke-width:2px
+    style Heap fill:#ffffff,stroke:#2e7d32,stroke-width:2px
+    style File fill:#ffffff,stroke:#8d6e63,stroke-width:2px

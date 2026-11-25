@@ -75,6 +75,7 @@ left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
 heapifyUp() and heapifyDown().
 3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
 tasks.txt and reload them on startup.
+### System Architecture
 mermaid
 flowchart TD
     UI["<b>1. Console UI Layer (main loop)</b><br/>Menu, scanf/fgets Input Validation"]

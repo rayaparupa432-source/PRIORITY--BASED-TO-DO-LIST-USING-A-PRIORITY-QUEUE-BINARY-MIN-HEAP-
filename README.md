@@ -100,3 +100,29 @@ tasks.txt and reload them on startup.
 |            FILE* (tasks.txt Read & Write)             |
 +-------------------------------------------------------+
 </pre>
+
+<h3>Figure 4.2: Array-Backed Binary Min-Heap Mapping (heap = Most Urgent)</h3>
+
+<pre>
+                 +-------------------------+
+
+                 |    P1: Submit Report    |
+                 |     (Index 0 - Root)    |
+                 +-------------------------+
+                       /             \
+                      /               \
+                     v                 v
+      +---------------------+   +---------------------+
+
+      | P2: Fix Memory Bug  |   |  P3: Prepare Viva   |
+      |      (Index 1)      |   |      (Index 2)      |
+      +---------------------+   +---------------------+
+             /         \
+            /           \
+           v             v
++-----------------+ +-----------------+
+
+| P4: Backup Files| | P5: Clean Notes |
+|    (Index 3)    | |    (Index 4)    |
++-----------------+ +-----------------+
+</pre>

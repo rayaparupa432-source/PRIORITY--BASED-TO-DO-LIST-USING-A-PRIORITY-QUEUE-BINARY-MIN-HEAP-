@@ -19,7 +19,7 @@ Traditional to-do lists built using basic arrays or linked lists suffer from cle
 # 2.1 Initial Team Meeting (Individual Project Planning)
 As per the CSE 2B DSA Mini Project guidelines, this work was planned and executed as an individual project ahead of the 30 November 2026 submission deadline. The objective was to implement Topic 3 ("To-do list with priorities: Use a priority queue (heap) so the most urgent task comes out first") in pure C using explicit array-based heap manipulation rather than external library shortcuts.
 
-All phases—including designing the struct Task layout, coding heapifyUp() and heapifyDown(), validating edge cases, and uploading main.c to GitHub—were carried out independently using Visual Studio Code and the GCC C compiler.
+All phases-including designing the struct Task layout, coding heapifyUp() and heapifyDown(), validating edge cases, and uploading main.c to GitHub—were carried out independently using Visual Studio Code and the GCC C compiler.
 # 2.2 Brainstorming and Requirement Identification
 Before writing code, three standard data structures were compared for managing prioritized tasks:
 | Operation | Unsorted Array | Sorted Array | Binary Min-Heap (Chosen) |

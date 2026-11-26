@@ -48,7 +48,7 @@ The proposed system stores tasks in a fixed-capacity 1D array Task heap[MAX_TASK
 | System design | Individual (Self) | Nov 20 – Nov 21, 2026 | Completed |
 | Development (C Coding) | Individual (Self) | Nov 21 – Nov 22, 2026 | Completed |
 | Testing & Validation | Individual (Self) | Nov 22 – Nov 23, 2026 | Completed |
-| Documentation & GitHub Upload | Individual (Self) | Nov 23 – Nov 25, 2026 | Completed |
+| Documentation & GitHub Upload | Individual (Self) | Nov 23 – Nov 26, 2026 | Completed |
 
 # CHAPTER 3: REQUIREMENT ANALYSIS AND FEASIBILITY STUDY
 **Hardware and Software Requirements**
@@ -70,8 +70,8 @@ The proposed system stores tasks in a fixed-capacity 1D array Task heap[MAX_TASK
 The program is divided into three clean functional layers:
 1. **Console Interface Layer (main):** Displays the interactive menu, reads user choices, and cleans
 standard input streams.
-2. **Min-Heap Priority Engine:** Uses 0-based array index formulas—parent = (i - 1) / 2, 
-left = 2 * i + 1, and right = 2 * i + 2—to maintain heap order through
+2. **Min-Heap Priority Engine:** Uses 0-based array index formulas-parent = (i - 1) / 2, 
+left = 2 * i + 1, and right = 2 * i + 2-to maintain heap order through
 heapifyUp() and heapifyDown().
 3. **File Persistence Layer:** Uses C FILE* operations (fopen, fprintf, fgets) to save tasks to
 tasks.txt and reload them on startup.
@@ -241,13 +241,13 @@ When the user chooses to complete the top-priority task, the program follows the
 ## 5.1 Development Environment
 I wrote this project in standard C using Visual Studio Code and compiled it with the command gcc -Wall -O2 main.c -o todo. For version control and hosting the source code, I used Git and GitHub.
 
-## 5.3 Database / File Handling Implementation
+## 5.2 Database / File Handling Implementation
 All tasks are saved inside tasks.txt using a simple line format: priority|order|title. Whenever the program starts, the loadFromFile() function reads each line back into the heap[] array. After loading, it runs Floyd's bottom-up heapify loop starting from (heapSize / 2) - 1 down to 0 so that the valid Min-Heap order is restored in $O(n)$ time.
 
-## 5.4 Integration of Components
+## 5.3 Integration of Components
 The main() function works as the central controller of the application. Once the saved tasks are loaded on startup, it displays a continuous 5-option menu for the user. Every time a task is added (enqueueTask) or completed (completeUrgent), the program immediately updates both the in-memory heap array and the tasks.txt file to keep data synced.
 
-## 5.5 Source Code Repository & Project Structure
+## 5.4 Source Code Repository & Project Structure
 
 ### Project Directory Structure
 <pre>

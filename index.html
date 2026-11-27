@@ -1,147 +1,215 @@
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Mini Project: Priority To-Do List</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f1f5f9; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 40px 15px; margin: 0; }
+        .card { background: #ffffff; width: 100%; max-width: 560px; padding: 30px; border-radius: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.07); }
+        h1 { text-align: center; color: #0f172a; margin: 0 0 6px 0; font-size: 24px; }
+        .subtitle { text-align: center; color: #64748b; font-size: 13px; margin: 0 0 24px 0; }
+        
+        .row { display: flex; gap: 10px; margin-bottom: 12px; }
+        input[type="text"] { flex: 1; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
+        input[type="text"]:focus { border-color: #1d4ed8; }
+        select { padding: 11px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; background: #fff; cursor: pointer; }
+        
+        button { padding: 11px 16px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-blue { width: 100%; background-color: #1d4ed8; color: white; margin-bottom: 10px; }
+        .btn-blue:hover { background-color: #1e40af; }
+        
+        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-gray { flex: 1; background-color: #e2e8f0; color: #1e293b; }
+        .btn-gray:hover { background-color: #cbd5e1; }
+        .btn-green { flex: 1; background-color: #15803d; color: white; }
+        .btn-green:hover { background-color: #166534; }
 
-#define MAX_TASKS 100
-#define MAX_TITLE 100
-#define FILENAME "tasks.txt"
+        .urgent-banner { background-color: #f8fafc; border-left: 4px solid #f97316; padding: 14px 16px; border-radius: 6px; margin-bottom: 22px; font-size: 14px; color: #334155; }
+        .urgent-banner strong { color: #0f172a; }
 
-typedef struct {
-    int priority;
-    int order;
-    char title[MAX_TITLE];
-} Task;
+        h3 { font-size: 15px; color: #1e293b; margin: 0 0 12px 0; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; font-size: 14px; }
+        .badge { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; color: white; }
+        .p1 { background: #dc2626; }
+        .p2 { background: #ea580c; }
+        .p3 { background: #d97706; }
+        .p4 { background: #0284c7; }
+        .p5 { background: #64748b; }
+        .empty { color: #94a3b8; font-size: 13px; text-align: center; padding: 10px 0; }
+    </style>
+</head>
+<body>
 
-Task heap[MAX_TASKS];
-int heapSize = 0, taskCounter = 0;
+<div class="card">
+    <h1>Priority To-Do List</h1>
+    <p class="subtitle">Min-Heap Implementation (Priority 1 = Most Urgent)</p>
 
-int isMoreUrgent(Task a, Task b) {
-    if (a.priority != b.priority)
-        return a.priority &lt; b.priority;
-    return a.order &lt; b.order;
-}
+    <div class="row">
+        <input type="text" id="taskInput" placeholder="Enter task title...">
+        <select id="prioritySelect">
+            <option value="1">Priority 1 (Highest)</option>
+            <option value="2">Priority 2</option>
+            <option value="3" selected>Priority 3</option>
+            <option value="4">Priority 4</option>
+            <option value="5">Priority 5 (Lowest)</option>
+        </select>
+    </div>
 
-void swapTasks(Task *a, Task *b) {
-    Task temp = *a;
-    *a = *b;
-    *b = temp;
-}
+    <button class="btn-blue" onclick="addTask()">1. Add Task (Enqueue)</button>
 
-void heapifyUp(int index) {
-    while (index &gt; 0 &amp;&amp; isMoreUrgent(heap[index], heap[(index - 1) / 2])) {
-        swapTasks(&amp;heap[index], &amp;heap[(index - 1) / 2]);
-        index = (index - 1) / 2;
+    <div class="btn-group">
+        <button class="btn-gray" onclick="viewUrgent()">2. View Most Urgent</button>
+        <button class="btn-green" onclick="completeUrgent()">3. Complete Most Urgent</button>
+    </div>
+
+    <div class="urgent-banner" id="urgentBox">
+        Most Urgent Task: <strong>None</strong>
+    </div>
+
+    <h3>4. Pending Tasks (Most Urgent First)</h3>
+    <ul id="taskList"></ul>
+</div>
+
+<script>
+    let heap = [];
+    let taskCounter = 0;
+
+    function isMoreUrgent(a, b) {
+        if (a.priority !== b.priority) return a.priority < b.priority;
+        return a.order < b.order;
     }
-}
 
-void heapifyDown(int index) {
-    int smallest = index, left = 2 * index + 1, right = 2 * index + 2;
-    if (left &lt; heapSize &amp;&amp; isMoreUrgent(heap[left], heap[smallest])) smallest = left;
-    if (right &lt; heapSize &amp;&amp; isMoreUrgent(heap[right], heap[smallest])) smallest = right;
-    if (smallest != index) {
-        swapTasks(&amp;heap[index], &amp;heap[smallest]);
-        heapifyDown(smallest);
+    function swap(i, j) {
+        let temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
     }
-}
 
-void saveToFile() {
-    FILE *fp = fopen(FILENAME, "w");
-    if (!fp) return;
-    for (int i = 0; i &lt; heapSize; i++)
-        fprintf(fp, "%d|%d|%s\n", heap[i].priority, heap[i].order, heap[i].title);
-    fclose(fp);
-}
-
-void loadFromFile() {
-    FILE *fp = fopen(FILENAME, "r");
-    if (!fp) return;
-    heapSize = 0;
-    while (heapSize &lt; MAX_TASKS &amp;&amp; fscanf(fp, "%d|%d|%[^\n]\n", &amp;heap[heapSize].priority, &amp;heap[heapSize].order, heap[heapSize].title) == 3) {
-        if (heap[heapSize].order &gt; taskCounter) taskCounter = heap[heapSize].order;
-        heapSize++;
+    function heapifyUp(index) {
+        while (index > 0) {
+            let parent = Math.floor((index - 1) / 2);
+            if (isMoreUrgent(heap[index], heap[parent])) {
+                swap(index, parent);
+                index = parent;
+            } else {
+                break;
+            }
+        }
     }
-    fclose(fp);
-    for (int i = (heapSize / 2) - 1; i &gt;= 0; i--)
-        heapifyDown(i);
-}
 
-void enqueueTask(int priority, char title[]) {
-    if (heapSize &gt;= MAX_TASKS) {
-        printf("Error: Task list is full!\n");
-        return;
+    function heapifyDown(index) {
+        let smallest = index;
+        let left = 2 * index + 1;
+        let right = 2 * index + 2;
+
+        if (left < heap.length && isMoreUrgent(heap[left], heap[smallest])) smallest = left;
+        if (right < heap.length && isMoreUrgent(heap[right], heap[smallest])) smallest = right;
+
+        if (smallest !== index) {
+            swap(index, smallest);
+            heapifyDown(smallest);
+        }
     }
-    heap[heapSize].priority = priority;
-    heap[heapSize].order = ++taskCounter;
-    strcpy(heap[heapSize].title, title);
-    heapifyUp(heapSize++);
-    saveToFile();
-    printf("Task added successfully!\n");
-}
 
-void viewUrgent() {
-    if (heapSize == 0) printf("No pending tasks in the list.\n");
-    else printf("Most Urgent Task -&gt; [Priority %d] %s\n", heap.priority, heap.title);
-}
-
-void completeUrgent() {
-    if (heapSize == 0) {
-        printf("No tasks available to complete.\n");
-        return;
+    function saveToStorage() {
+        localStorage.setItem('minHeapTasksV2', JSON.stringify({ heap: heap, taskCounter: taskCounter }));
     }
-    printf("Completed &amp; Removed -&gt; [Priority %d] %s\n", heap.priority, heap.title);
-    heap = heap[--heapSize];
-    heapifyDown(0);
-    saveToFile();
-}
 
-void displayAllTasks() {
-    if (heapSize == 0) {
-        printf("The priority to-do list is currently empty.\n");
-        return;
+    function loadFromStorage() {
+        let data = localStorage.getItem('minHeapTasksV2');
+        if (data) {
+            let parsed = JSON.parse(data);
+            heap = parsed.heap || [];
+            taskCounter = parsed.taskCounter || 0;
+        }
+        updateDisplay();
     }
-    Task backupHeap[MAX_TASKS];
-    int backupSize = heapSize;
-    memcpy(backupHeap, heap, sizeof(heap));
 
-    printf("\n--- Pending Tasks (Most Urgent First) ---\n");
-    for (int rank = 1; heapSize &gt; 0; rank++) {
-        printf("%d. [Priority %d] %s\n", rank, heap.priority, heap.title);
-        heap = heap[--heapSize];
-        heapifyDown(0);
+    function addTask() {
+        let input = document.getElementById('taskInput');
+        let select = document.getElementById('prioritySelect');
+        let title = input.value.trim();
+        let priority = parseInt(select.value);
+
+        if (title === "") {
+            alert("Please enter a task title!");
+            return;
+        }
+
+        heap.push({ priority: priority, order: ++taskCounter, title: title });
+        heapifyUp(heap.length - 1);
+        saveToStorage();
+        input.value = "";
+        updateDisplay();
     }
-    memcpy(heap, backupHeap, sizeof(backupHeap));
-    heapSize = backupSize;
-}
 
-int main() {
-    loadFromFile();
-    int choice, priority;
-    char title[MAX_TITLE];
-
-    while (1) {
-        printf("\n=== DSA MINI PROJECT: PRIORITY TO-DO LIST ===\n");
-        printf("1. Add Task\n2. View Most Urgent Task\n3. Complete Most Urgent Task\n4. Display All Pending Tasks\n5. Exit\n");
-        printf("Enter your choice (1-5): ");
-        scanf("%d", &amp;choice);
-        getchar(); 
-
-        if (choice == 1) {
-            printf("Enter task title: ");
-            fgets(title, sizeof(title), stdin);
-            title[strcspn(title, "\n")] = '\0';
-
-            printf("Enter priority (1-5): ");
-            scanf("%d", &amp;priority);
-            if (priority &lt; 1 || priority &gt; 5) printf("Invalid priority!\n");
-            else enqueueTask(priority, title);
-        } 
-        else if (choice == 2) viewUrgent();
-        else if (choice == 3) completeUrgent();
-        else if (choice == 4) displayAllTasks();
-        else if (choice == 5) {
-            printf("Exiting program. All tasks saved to %s.\n", FILENAME);
-            break;
-        } 
-        else printf("Invalid choice!\n");
+    function viewUrgent() {
+        if (heap.length === 0) {
+            alert("No pending tasks in the list!");
+        } else {
+            alert("Most Urgent Task:\n[Priority " + heap[0].priority + "] " + heap[0].title);
+        }
     }
-    return 0;
-}
+
+    function completeUrgent() {
+        if (heap.length === 0) {
+            alert("No tasks available to complete!");
+            return;
+        }
+        let completed = heap[0];
+        let last = heap.pop();
+        if (heap.length > 0) {
+            heap[0] = last;
+            heapifyDown(0);
+        }
+        saveToStorage();
+        updateDisplay();
+        alert("Completed & Removed:\n[Priority " + completed.priority + "] " + completed.title);
+    }
+
+    function updateDisplay() {
+        let urgentBox = document.getElementById('urgentBox');
+        let taskList = document.getElementById('taskList');
+
+        if (heap.length === 0) {
+            urgentBox.innerHTML = 'Most Urgent Task: <strong>None</strong>';
+            taskList.innerHTML = '<div class="empty">The priority to-do list is currently empty.</div>';
+            return;
+        }
+
+        urgentBox.innerHTML = 'Most Urgent Task: <strong>[Priority ' + heap[0].priority + '] ' + heap[0].title + '</strong>';
+
+        let backup = heap.slice();
+        let sorted = [];
+        while (heap.length > 0) {
+            sorted.push(heap[0]);
+            let last = heap.pop();
+            if (heap.length > 0) {
+                heap[0] = last;
+                heapifyDown(0);
+            }
+        }
+        heap = backup;
+
+        taskList.innerHTML = '';
+        for (let i = 0; i < sorted.length; i++) {
+            let t = sorted[i];
+            let li = document.createElement('li');
+            li.innerHTML = '<span><strong>' + (i + 1) + '.</strong> ' + t.title + '</span>' +
+                           '<span class="badge p' + t.priority + '">Priority ' + t.priority + '</span>';
+            taskList.appendChild(li);
+        }
+    }
+
+    document.getElementById('taskInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') addTask();
+    });
+
+    loadFromStorage();
+</script>
+
+</body>
+</html>

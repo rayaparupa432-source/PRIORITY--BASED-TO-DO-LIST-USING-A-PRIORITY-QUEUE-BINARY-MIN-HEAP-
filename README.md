@@ -181,7 +181,7 @@ When the user chooses to complete the top-priority task, the program follows the
                                 v                                        |
                     +-----------------------+                            |
 
-                    | Copy heap to topTask|                            |
+                    | Copy heap to topTask|                              |
                     +-----------------------+                            |
 
                                 |                                        |
@@ -189,7 +189,7 @@ When the user chooses to complete the top-priority task, the program follows the
                     +-----------------------+                            |
 
                     | Move heap[heapSize-1] |                            |
-                    |   to heap & size--  |                            |
+                    |   to heap & size--  |                              |
                     +-----------------------+                            |
 
                                 |                                        |
